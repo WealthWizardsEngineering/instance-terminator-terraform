@@ -3,8 +3,7 @@
 A AWS Lambda function to automatically terminate hosts on autoscaling groups - using Terraform.
 
 This will run periodically and identify autoscaling groups tagged with can-be-terminated = 'true' and terminate the
-oldest instance as long as the group has 2 or more instances and the number of healthy instances is at least equal to
-the desired number of instances.
+oldest instance, see the [instance-terminator](https://github.com/WealthWizardsEngineering/instance-terminator) for more details
 
 ## Rationale
 
@@ -21,8 +20,12 @@ so regularly terminating nodes will help highly issues quickly.
 To use this module in your Terraform definition, add the following:
 
 ```
+provider "external" {
+  version = "~> 1.0"
+}
+
 module "instance_terminator" {
-  source = "github.com/WealthWizardsEngineering/instance-terminator"
+  source = "github.com/WealthWizardsEngineering/instance-terminator-terraform"
 }
 ```
 

@@ -1,7 +1,3 @@
-provider "archive" {
-  version = "1.0"
-}
-
 resource "aws_iam_policy" "instance_terminator_lambda" {
   name        = "${var.name}-lambda"
   path        = "/"
@@ -71,19 +67,22 @@ resource "aws_iam_role_policy_attachment" "instance_terminator_lambda" {
     policy_arn = "${aws_iam_policy.instance_terminator_lambda.arn}"
 }
 
-data "archive_file" "instance_terminator" {
-  type        = "zip"
-  source_file = "${path.module}/lambda/src/instance_terminator.js"
-  output_path = "${path.module}/lambda/instance_terminator.zip"
+data "external" "download" {
+  program = ["bash", "${path.module}/scripts/download.sh"]
+  query   = {
+    url              = "${var.download_url != "" ? var.download_url : format("https://github.com/WealthWizardsEngineering/instance-terminator/releases/download/%s/instance-terminator.zip", var.instance_terminator_version)}"
+    output_directory = "${path.module}"
+    output_filename  = "instance-terminator.zip"
+  }
 }
 
 resource "aws_lambda_function" "instance_terminator" {
-  filename         = "${data.archive_file.instance_terminator.output_path}"
+  filename         = "${data.external.download.result.output_file}"
   function_name    = "${var.name}"
   role             = "${aws_iam_role.instance_terminator_lambda.arn}"
-  handler          = "instance_terminator.handler"
+  handler          = "src/instance_terminator.handler"
   timeout          = 30
-  source_code_hash = "${base64sha256(file("${data.archive_file.instance_terminator.output_path}"))}"
+  source_code_hash = "${base64sha256(file(data.external.download.result.output_file))}"
   runtime          = "nodejs6.10"
 }
 
