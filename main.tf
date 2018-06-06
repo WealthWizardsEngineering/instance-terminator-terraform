@@ -83,7 +83,7 @@ resource "aws_lambda_function" "instance_terminator" {
   handler          = "src/instance_terminator.handler"
   timeout          = 30
   source_code_hash = "${base64sha256(file(data.external.download.result.output_file))}"
-  runtime          = "nodejs6.10"
+  runtime          = "nodejs8.10"
 }
 
 resource "aws_cloudwatch_event_rule" "lambda_instance_terminator" {
