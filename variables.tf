@@ -10,7 +10,7 @@ variable "lambda_schedule" {
 
 variable "instance_terminator_version" {
   description = "The version of the instance terminator lambda"
-  default     = "v0.0.3"
+  default     = "v0.0.4"
 }
 
 variable "download_url" {
