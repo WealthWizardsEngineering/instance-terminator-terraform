@@ -71,10 +71,10 @@ resource "aws_iam_role_policy_attachment" "instance_terminator_lambda" {
 
 data "external" "download" {
   program = ["bash", "${path.module}/scripts/download.sh"]
-  query = {
-    url = var.download_url != "" ? var.download_url : format(
-      "https://github.com/WealthWizardsEngineering/instance-terminator/releases/download/%s/instance-terminator.zip",
-      var.instance_terminator_version,
+  query   = {
+    url              = var.download_url != "" ? var.download_url : format(
+    "https://github.com/WealthWizardsEngineering/instance-terminator/releases/download/%s/instance-terminator.zip",
+    var.instance_terminator_version,
     )
     output_directory = path.module
     output_filename  = "instance-terminator.zip"
@@ -88,7 +88,7 @@ resource "aws_lambda_function" "instance_terminator" {
   handler          = "src/instance_terminator.handler"
   timeout          = 30
   source_code_hash = filebase64sha256(data.external.download.result.output_file)
-  runtime          = "nodejs8.10"
+  runtime          = var.runtime
 }
 
 resource "aws_cloudwatch_event_rule" "lambda_instance_terminator" {
