@@ -10,7 +10,7 @@ variable "lambda_schedule" {
 
 variable "instance_terminator_version" {
   description = "The version of the instance terminator lambda"
-  default     = "v0.0.4"
+  default     = "v0.0.16"
 }
 
 variable "download_url" {
@@ -18,3 +18,7 @@ variable "download_url" {
   default     = ""
 }
 
+variable "runtime" {
+  description = "The default node.js runtime for the lambda function"
+  default     = "nodejs12.x"
+}
