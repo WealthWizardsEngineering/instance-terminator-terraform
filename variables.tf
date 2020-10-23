@@ -17,3 +17,4 @@ variable "download_url" {
   description = "The full url for the instance terminator zip file, used for testing"
   default     = ""
 }
+
