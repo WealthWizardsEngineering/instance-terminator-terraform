@@ -73,7 +73,7 @@ data "external" "download" {
   program = ["bash", "${path.module}/scripts/download.sh"]
   query   = {
     url              = var.download_url != "" ? var.download_url : format(
-    "https://github.com/WealthWizardsEngineering/instance-terminator/archive/%s.zip",
+    "https://github.com/WealthWizardsEngineering/instance-terminator/releases/download/%s/instance-terminator.zip",
     var.instance_terminator_version,
     )
     output_directory = path.module
